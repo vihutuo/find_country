@@ -1,0 +1,143 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="./dist/css/jsvectormap.css" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="./dist/js/jsvectormap.min.js"></script>
+    </head>
+    <body>
+        <div class="flex-container">
+        <div>Streak : <span id='streak'>0</span></div>
+        <div>Find <span id='country'></span></div>
+        <div>Highest Streak : <span id='histreak'>0</span></div>
+
+        </div>
+        
+        <div id="map"></div>
+
+    </body>
+    
+        <script src="./dist/maps/world.js"></script>
+        <script src="./dist/maps/world-merc.js"></script>
+        <script src="myjs.js"></script>
+
+        <script>
+        function NewQuestion()
+        {
+          markers = getMultipleRandom(all_countries,4);
+         
+          console.log(markers);
+          answer_index = 0;
+          answer = markers[answer_index];
+          
+        }
+        function NewGame()
+        {
+               game_over = 0;
+               map.reset();
+               NewQuestion();
+               map.addMarkers(markers);
+              
+               document.getElementById('country').innerText = answer.name;
+        }  
+          //console.log(all_countries);
+          var markers;
+          var  answer_index;
+          var answer;
+          var streak =0 ;
+          var hi_streak = 0;
+          var game_over  = 0;
+          NewQuestion();
+          document.getElementById('country').innerText = answer.name;
+
+
+            var map = new jsVectorMap({
+    map: 'world', // 'canada', ...
+    selector: '#map', 
+    showTooltip: false,
+    markersSelectable: false,
+    // -------- Marker and label style --------
+    markers: markers,
+    labels: {
+    markers: {
+      render(marker, index) {
+        if (game_over == 1)
+            return marker.name || marker.labelName || 'Not available'
+        else
+            return ""    
+      }
+      }
+    },
+    markerStyle: {
+        initial: {
+          fill: '#ff5566'
+        },
+        hover: {
+          stroke: "#676767",
+          fillOpacity: 1,
+          strokeWidth: 2.5,
+          fill: '#ff5566'
+        },
+        selected: {
+          fill: '#ff9251'
+        }
+      },
+     
+      markerLabelStyle: {
+        initial: {
+          fontFamily: 'Poppins',
+          fontSize: 13,
+          fontWeight: 500,
+          fill: '#35373e',
+        },
+      },
+
+    
+      onMarkerClick: function(event, markerIndex) {
+      if (game_over == 1 )
+      {
+         NewGame();
+         return;  
+      }   
+      if (game_over == 0  )
+         game_over = 1;
+      if (markerIndex ==   answer_index)
+      {
+        console.log("Correct");  
+        streak++;
+
+      }
+      else
+      {
+        console.log("Wrong");  
+        streak = 0;
+      }
+      if (streak>=hi_streak)
+      {
+         hi_streak = streak;
+         document.getElementById('histreak').innerText = hi_streak;
+      }   
+      document.getElementById('streak').innerText = streak;
+      //answer.style.fill= "#588157";
+      map.reset();
+      map.addMarkers(markers);
+      
+
+
+      console.log(markerIndex);
+   
+    },
+    
+    onRegionClick: function(event, code) {
+      
+      if (game_over == 1 )
+          NewGame();  
+    
+   
+
+}
+
+});
+        </script>
+
+   
+</html>
