@@ -2,4 +2,6 @@
     display: flex;
     justify-content: space-between;
     font-size:22px;
+    background-color:#cccccc 	;
+    padding: 10;
   }
